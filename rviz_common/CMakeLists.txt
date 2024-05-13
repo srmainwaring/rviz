@@ -131,7 +131,7 @@ set(rviz_common_headers_to_moc
 )
 
 foreach(header "${rviz_common_headers_to_moc}")
-  qt6_wrap_cpp(rviz_common_moc_files "${header}")
+  qt_wrap_cpp(rviz_common_moc_files "${header}")
 endforeach()
 
 set(rviz_common_source_files
@@ -324,10 +324,10 @@ if(BUILD_TESTING)
   find_package(ament_cmake_gmock REQUIRED)
   find_package(ament_cmake_gtest REQUIRED)
 
-  qt6_wrap_cpp(rviz_common_test_moc_files test/mock_display.hpp)
-  qt6_wrap_cpp(rviz_common_test_moc_files test/mock_property_change_receiver.hpp)
+  qt_wrap_cpp(rviz_common_test_moc_files test/mock_display.hpp)
+  qt_wrap_cpp(rviz_common_test_moc_files test/mock_property_change_receiver.hpp)
 
-  qt6_wrap_cpp(rviz_common_test_frame_manager_moc src/rviz_common/frame_manager.hpp)
+  qt_wrap_cpp(rviz_common_test_frame_manager_moc src/rviz_common/frame_manager.hpp)
 
   ament_add_gmock(display_factory_test
     test/display_factory_test.cpp

@@ -135,7 +135,7 @@ set(rviz_default_plugins_headers_to_moc
 )
 
 foreach(header "${rviz_default_plugins_headers_to_moc}")
-  qt6_wrap_cpp(rviz_default_plugins_moc_files "${header}")
+  qt_wrap_cpp(rviz_default_plugins_moc_files "${header}")
 endforeach()
 
 set(rviz_default_plugins_source_files
