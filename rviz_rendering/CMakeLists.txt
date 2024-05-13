@@ -63,7 +63,7 @@ if(Qt6_FOUND AND WIN32 AND TARGET Qt6::qmake AND NOT TARGET Qt6::windeployqt)
 endif()
 
 # These need to be added in the add_library() call
-qt6_wrap_cpp(rviz_rendering_moc_files include/rviz_rendering/render_window.hpp)
+qt_wrap_cpp(rviz_rendering_moc_files include/rviz_rendering/render_window.hpp)
 
 add_library(rviz_rendering SHARED
   ${rviz_rendering_moc_files}
