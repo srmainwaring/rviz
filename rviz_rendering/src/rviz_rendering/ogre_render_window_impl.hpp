@@ -62,7 +62,7 @@ namespace rviz_rendering
 /// Implementation for the rviz_rendering::RenderWindow class that uses Ogre.
 /**
  * Based on the QtOgreRenderWindow from previous versions of rviz and new
- * Ogre/Qt6 integration recommendationd.
+ * Ogre/Qt integration recommendationd.
  */
 class RenderWindowImpl
 {
