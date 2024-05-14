@@ -25,7 +25,6 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
 find_package(rclcpp REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rviz_common REQUIRED)
@@ -35,17 +34,25 @@ find_package(std_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 
+if(MSVC)
+  set(QT_VERSION_MAJOR 5)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
+else()
+  find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
+endif()
+
 find_package(ament_cmake_gtest REQUIRED)
 ament_find_gtest()
 
 # TODO(wjwwood): this block is to setup the windeployqt tool, could be removed later.
-if(Qt6_FOUND AND WIN32 AND TARGET Qt6::qmake AND NOT TARGET Qt6::windeployqt)
-  get_target_property(_qt6_qmake_location Qt6::qmake IMPORTED_LOCATION)
+if(Qt${QT_VERSION_MAJOR}_FOUND AND WIN32 AND TARGET Qt${QT_VERSION_MAJOR}::qmake AND NOT TARGET Qt${QT_VERSION_MAJOR}::windeployqt)
+  get_target_property(_qt${QT_VERSION_MAJOR}_qmake_location Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
 
   execute_process(
-    COMMAND "${_qt6_qmake_location}" -query QT_INSTALL_PREFIX
+    COMMAND "${_qt${QT_VERSION_MAJOR}_qmake_location}" -query QT_INSTALL_PREFIX
     RESULT_VARIABLE return_code
-    OUTPUT_VARIABLE qt6_install_prefix
+    OUTPUT_VARIABLE qt${QT_VERSION_MAJOR}_install_prefix
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 endif()
@@ -71,8 +78,8 @@ target_include_directories(rviz_visual_testing_framework
 
 target_link_libraries(rviz_visual_testing_framework PUBLIC
   ${geometry_msgs_TARGETS}
-  Qt6::Test
-  Qt6::Widgets
+  Qt${QT_VERSION_MAJOR}::Test
+  Qt${QT_VERSION_MAJOR}::Widgets
   rclcpp::rclcpp
   rcutils::rcutils
   rviz_common::rviz_common
@@ -84,7 +91,7 @@ target_link_libraries(rviz_visual_testing_framework PUBLIC
 )
 
 # export information to downstream packages
-ament_export_dependencies(geometry_msgs Qt6 rclcpp rcutils rviz_common rviz_ogre_vendor rviz_rendering std_msgs tf2 tf2_ros)
+ament_export_dependencies(geometry_msgs Qt${QT_VERSION_MAJOR} rclcpp rcutils rviz_common rviz_ogre_vendor rviz_rendering std_msgs tf2 tf2_ros)
 
 # Export old-style CMake variables
 ament_export_include_directories("include/${PROJECT_NAME}")

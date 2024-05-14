@@ -32,9 +32,16 @@ find_package(ament_cmake REQUIRED)
 if(BUILD_TESTING)
   # do find_package(rviz_ogre_vendor) first to make sure the custom OGRE is found
   find_package(rviz_ogre_vendor REQUIRED)
-  find_package(Qt6 REQUIRED COMPONENTS Widgets)
   find_package(rviz_rendering REQUIRED)
   find_package(resource_retriever REQUIRED)
+
+  if(MSVC)
+    set(QT_VERSION_MAJOR 5)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+  else()
+    find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+  endif()
 
   # Adds shallow folders containing ogre_media such as meshes and scripts to Rviz
   # so that they can be found at runtime. Requires rviz_rendering.

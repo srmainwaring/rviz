@@ -25,6 +25,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# find package Qt6 because otherwise using the rviz_common::rviz_common
-# exported target will complain that the Qt6::Widgets target does not exist
-find_package(Qt6 REQUIRED QUIET COMPONENTS Widgets)
+# find package Qt because otherwise using the rviz_common::rviz_common
+# exported target will complain that the Qt::Widgets target does not exist
+if(MSVC)
+  set(QT_VERSION_MAJOR 5)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED QUIET COMPONENTS Widgets)
+else()
+  find_package(QT NAMES Qt6 Qt5 REQUIRED QUIET COMPONENTS Widgets)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED QUIET COMPONENTS Widgets)
+endif()

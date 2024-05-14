@@ -109,7 +109,13 @@ In particular, for this mechanism to work, we also need to wrap the `ament_add_g
 
 Moreover, should it not already be present, the following should also be included:
 
-    find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
+    if(MSVC)
+      set(QT_VERSION_MAJOR 5)
+      find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
+    else()
+      find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test)
+      find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
+    endif()
 
 ### How to write a test
 

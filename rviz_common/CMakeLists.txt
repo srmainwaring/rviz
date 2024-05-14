@@ -31,7 +31,13 @@ find_package(ament_cmake REQUIRED)
 # do find_package(rviz_ogre_vendor) first to make sure the custom OGRE is found
 find_package(rviz_ogre_vendor REQUIRED)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+if(MSVC)
+  set(QT_VERSION_MAJOR 5)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+else()
+  find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+endif()
 
 find_package(geometry_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -239,7 +245,7 @@ target_link_libraries(rviz_common PUBLIC
   ${geometry_msgs_TARGETS}
   message_filters::message_filters
   pluginlib::pluginlib
-  Qt6::Widgets
+  Qt${QT_VERSION_MAJOR}::Widgets
   rclcpp::rclcpp
   rviz_ogre_vendor::OgreMain
   rviz_ogre_vendor::OgreOverlay
@@ -265,7 +271,7 @@ ament_export_dependencies(
   geometry_msgs
   message_filters
   pluginlib
-  Qt6
+  Qt${QT_VERSION_MAJOR}
   rclcpp
   rviz_ogre_vendor
   rviz_rendering
@@ -336,7 +342,7 @@ if(BUILD_TESTING)
   if(TARGET display_factory_test)
     target_compile_definitions(display_factory_test PUBLIC
       -D_TEST_PLUGIN_DESCRIPTIONS="${CMAKE_CURRENT_SOURCE_DIR}")
-    target_link_libraries(display_factory_test rviz_common Qt6::Widgets)
+    target_link_libraries(display_factory_test rviz_common Qt${QT_VERSION_MAJOR}::Widgets)
   endif()
 
   ament_add_gmock(frame_manager_test
@@ -445,7 +451,7 @@ if(BUILD_TESTING)
     test/mock_property_change_receiver.cpp
     ${SKIP_DISPLAY_TESTS})
   if(TARGET rviz_common_display_test)
-    target_link_libraries(rviz_common_display_test rviz_common Qt6::Widgets yaml-cpp::yaml-cpp)
+    target_link_libraries(rviz_common_display_test rviz_common Qt${QT_VERSION_MAJOR}::Widgets yaml-cpp::yaml-cpp)
   endif()
 endif()
 
